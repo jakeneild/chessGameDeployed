@@ -416,7 +416,6 @@ var data = {
         console.log(data.board)
         var canCastle = require("./canCastle")
         let a = canCastle(data.turn)
-        console.log(data.board)
         if (a[0] !== 0 || a[1] || 1) {
             data.legalMoves.castle = [];
         }
@@ -441,7 +440,6 @@ var data = {
         }
     },
     removeChecks: function () {
-        console.log(data.board, "!")
         for (item in data.legalMoves) {
             if (item !== "castle") {
                 let check = false;
@@ -572,7 +570,6 @@ var data = {
                     data.board = holder;
                     data.turnSwitch();
                     if (check === true) {
-                        console.log("!!!removing move", data.legalMoves[item][i])
                         data.legalMoves[item].splice(i, 1)
                         i--;
                     }
@@ -584,7 +581,6 @@ var data = {
         start: function (move) {
             console.log("move:", move)
             let pawnPromotionCheck = require("./pawnPromotionCheck")
-            console.log("execute move start board pos: ", data.board)
             pawnPromotionCheck.run();
             pawnPromotionCheck.finish(move);
         },
@@ -674,7 +670,16 @@ var data = {
                 console.log("Invalid move")
             } else {
                 if (!move.includes("Castle")) {
-                    document.getElementById("info").innerHTML = "";
+                    document.getElementById("info").innerHTML = ""
+                    let button = document.createElement("button")
+                    button.id = "aiMove"
+                    button.type = "button"
+                    button.textContent = "Make AI move"
+                    ai = require("./ai")
+                    button.addEventListener("click", function () {
+                        ai.execute(data.board, data.turn)
+                    })
+                    document.getElementById("info").appendChild(button)
                     let piece = move.slice(0, 2);
                     let ogPosi = move.slice(2, 3);
                     let ogPosj = move.slice(3, 4);
@@ -746,18 +751,6 @@ var data = {
                         p.textContent = "There is a draw"
                         document.getElementById("info").appendChild(p)
                     }
-                }
-
-                if (document.getElementById("aiMove") === null || document.getElementById("aiMove") === undefined) {
-                    let button = document.createElement("button")
-                    button.id = "aiMove"
-                    button.type = "button"
-                    ai = require("./ai")
-                    button.addEventListener("click", function () {
-                        ai.execute(data.board, data.turn);
-                    })
-                    button.textContent = "Make AI move"
-                    document.getElementById("info").appendChild(button)
                 }
             }
         }

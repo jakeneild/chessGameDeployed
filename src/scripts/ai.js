@@ -702,7 +702,7 @@ const ai = {
         return check;
     },
     pruneMeta: function (obj) {
-        console.log("obj before prune: ", obj)
+        //console.log("obj before prune: ", obj)
         let pruneWorst = function (myObjArr, turn) {
             let meanScoreArr = [];
             let worstMeta = 999;
@@ -737,7 +737,7 @@ const ai = {
             meanScoreNum /= meanScoreArr.length
 
             objArr.splice(arrPos, 1)
-            console.log(worstScore, meanScoreNum)
+            //console.log(worstScore, meanScoreNum)
 
             if (worstScore <= meanScoreNum && turn === "W") {
                 if (obj.pruneDump === undefined) {
@@ -890,9 +890,16 @@ const ai = {
                 metaArr = metaArr.slice(0, 2)
             }
 
+            if(metaArr[1] === undefined){
+                metaArr[1] = metaArr[0]
+            }
             // console.log(metaArr)
 
-            bObj.meta = ((metaArr[0] + metaArr[1]) / metaArr.length)
+            if(bObj.meta !== undefined){
+                bObj.meta = ((bObj.meta + ((metaArr[0] + metaArr[1]) / metaArr.length))/2)
+            } else {
+                bObj.meta = ((metaArr[0] + metaArr[1]) / metaArr.length)
+            }
 
             // console.log(bObj.meta)
 
@@ -905,7 +912,7 @@ const ai = {
         for (item in myObj.start) {
             if (item !== "turn" && item !== "score" && item !== "board" && item !== "meta" && item !== "pruneDump") {
                 explore(newBoard(myObj.start[item].board), changeTurn(turn), inc(iteration), myObj.start[item], 2)
-                console.log(myObj)
+                //console.log(myObj)
                 scoreExplore(myObj.start[item])
 
                 for (let i = 0; i <= 3; i++) {
@@ -931,6 +938,11 @@ const ai = {
 
                 if (piece.includes("b") || piece.includes("n")) {
                     worth = 3
+                    if(piece.includes("W")){
+                        score += (((i-6)*-1)/20)
+                    } else {
+                        score -= ((i-1)/20)
+                    }
                 }
 
                 if (piece.includes("r")) {
@@ -939,6 +951,12 @@ const ai = {
 
                 if (piece.includes("p")) {
                     worth = 1
+                    //pawn position stuff
+                    if(piece.includes("W")){
+                        score += (((i-6)*-1)/10)
+                    } else {
+                        score -= ((i-1)/10)
+                    }
                 }
 
                 if (piece.includes("q")) {
@@ -950,17 +968,17 @@ const ai = {
         }
         arr = ai.getLegalMoves(board, turn)
 
-        if (ai.isInCheck(board, "W")) { //need to define all these
-            score -= 1
+        if (ai.isInCheck(board, "W")) {
+            score -= 2
             if (turn === "W" && arr.length === 0) {
                 score -= 100
             }
         }
 
         if (ai.isInCheck(board, "B")) {
-            score += 1
+            score += 2
             if (turn === "B" && arr.length === 0) {
-                score -= 100
+                score += 100
             }
         }
 

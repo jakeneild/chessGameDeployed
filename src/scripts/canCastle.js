@@ -2,7 +2,7 @@ var data = require("./data")
 var inCheck = require("./isInCheck")
 
 var canCastle = function (turn) {
-    console.log(data.board, "!")
+    //console.log(data.board, "!")
     let arr = [1, 1]
     let holder = []
 

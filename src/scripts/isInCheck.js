@@ -82,7 +82,7 @@ var isInCheck = function (turn) {
             lineCheck(a, b)
         }
     }
-    console.log("king line array:", array)
+    //console.log("king line array:", array)
 
 
     if (array.includes("!") || array.includes(`${opponent}q`)) { //check for kings and queens

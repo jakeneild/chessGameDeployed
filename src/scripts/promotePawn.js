@@ -2,7 +2,6 @@ let data = require("./data")
 let domPrinter = require("./domPrinter")
 
 let promotePawn = function(posArr){
-    console.log(document.getElementById("info").firstChild)
     if(document.getElementById("info").firstChild === null){
         let completePromotion = function(e){
             document.getElementById("info")
