@@ -351,7 +351,7 @@ var data = {
                                     if (data.board[i + k][j + k] === "e") {
                                         let move = `${piece}${i}${j}${i + k}${j + k}`
                                         data.legalMovesPush(move)
-                                    } else if (data.board[i + k][j].includes(data.opponent)) {
+                                    } else if (data.board[i + k][j + k].includes(data.opponent)) {
                                         let move = `${piece}${i}${j}${i + k}${j + k}`
                                         data.legalMovesPush(move)
                                         k = 8
@@ -748,10 +748,19 @@ var data = {
                     }
                 }
 
-
+                if (document.getElementById("aiMove") === null || document.getElementById("aiMove") === undefined) {
+                    let button = document.createElement("button")
+                    button.id = "aiMove"
+                    button.type = "button"
+                    ai = require("./ai")
+                    button.addEventListener("click", function () {
+                        ai.execute(data.board, data.turn);
+                    })
+                    button.textContent = "Make AI move"
+                    document.getElementById("info").appendChild(button)
+                }
             }
         }
-
     },
     selectedPiece: ""
 }
